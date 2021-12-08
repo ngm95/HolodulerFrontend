@@ -51,12 +51,7 @@ export default {
     beforeCreate : function() {
         axios.get("http://192.168.0.8:9000/livestream/getCompletedListIn3Day").then(result=> {
 			if (result.status == 200)
-            this.completedVideos = result.data;
-			else {
-				axios.get("http://114.206.252.118:25380/livestream/getCompletedListIn3Day").then(result=> {
-					this.completedVideos = result.data;
-				});
-			}
+            	this.completedVideos = result.data;
 	  	}).catch(result => {
 			  axios.get("http://114.206.252.118:25380/livestream/getCompletedListIn3Day").then(result=> {
 					this.completedVideos = result.data;
