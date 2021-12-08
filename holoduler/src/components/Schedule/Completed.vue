@@ -49,10 +49,15 @@ export default {
        }
     },
     beforeCreate : function() {
-        axios.get("http://localhost:9000/livestream/getCompletedListIn3Day").then(result=> {
-		    var videos = result.data;
-            this.completedVideos = videos;
-	  });
+        axios.get("http://192.168.0.8:9000/livestream/getCompletedListIn3Day").then(result=> {
+			if (result.status == 200)
+            this.completedVideos = result.data;
+			else {
+				axios.get("http://114.206.252.118:25380/livestream/getCompletedListIn3Day").then(result=> {
+					this.completedVideos = result.data;
+				});
+			}
+	  	});
     }
 }
 </script>

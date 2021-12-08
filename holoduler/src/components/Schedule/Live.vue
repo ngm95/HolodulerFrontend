@@ -49,10 +49,15 @@ export default {
        }
     },
     beforeCreate : function() {
-        axios.get("http://localhost:9000/livestream/getLiveList").then(result=> {
-			console.log();
-            this.liveVideos = result.data;
-	  });
+        axios.get("http://192.168.0.8:9000/livestream/getLiveList").then(result=> {
+			if (result.status == 200)
+            	this.liveVideos = result.data;
+			else {
+				axios.get("http://114.206.252.118:25380/livestream/getLiveList").then(result=> {
+					this.liveVideos = result.data;
+				});
+			}
+	  	});
     }
 }
 </script>

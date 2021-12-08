@@ -26,12 +26,6 @@ export default {
       
   },
   mounted : function() {
-	  axios.get("http://localhost:9000/livestream/getUpcomingList").then(function(videos) {
-		  //console.log(videos);
-	  });
-	  axios.get("http://localhost:9000/livestream/getCompletedListIn3Day").then(function(videos) {
-		  //console.log(videos);
-	  });
   },
   methods : {
 	  addIframe(video, idx) {
