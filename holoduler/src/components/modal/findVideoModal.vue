@@ -138,6 +138,10 @@ import axios from 'axios'
                             this.completedVideos = result.data;
                         });
                     }
+                }).catch(result => {
+                    axios.get('http://114.206.252.118:25380/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate).then(result => {
+                            this.completedVideos = result.data;
+                        });
                 });
                 
             },
@@ -164,7 +168,13 @@ import axios from 'axios'
                             this.liveVideos = result.data;
                     })
                 }
-            })
+            }).catch(result => {
+                axios.get('http://114.206.252.118:25380/livestream/getLiveList').then(result => {
+                        if (result.status == 200)
+                            this.liveVideos = result.data;
+                    })
+            });
+            
             axios.get('http://192.168.0.8:9000/livestream/getUpcomingList').then(result => {
                 if (result.status == 200)
                     this.upcomingVideos = result.data;
@@ -174,7 +184,13 @@ import axios from 'axios'
                             this.upcomingVideos = result.data;
                     })
                 }    
-            })
+            }).catch(result => {
+                axios.get('http://114.206.252.118:25380/livestream/getUpcomingList').then(result => {
+                        if (result.status == 200)
+                            this.upcomingVideos = result.data;
+                    })
+            });
+
             axios.get('http://192.168.0.8:9000/livestream/getCompletedListIn3Day').then(result => {
                 if (result.status == 200)    
                     this.compltedVideos = result.data;
@@ -184,7 +200,12 @@ import axios from 'axios'
                             this.compltedVideos = result.data;
                     })
                 }
-            })
+            }).catch(result => {
+                axios.get('http://114.206.252.118:25380/livestream/getCompletedListIn3Day').then(result => {
+                        if (result.status == 200)
+                            this.compltedVideos = result.data;
+                    })
+            });
         }
     }
 

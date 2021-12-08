@@ -57,6 +57,10 @@ export default {
                 this.boardList = result.data;
             });
           }
+      }).catch(result => {
+          axios.get('http://114.206.252.118:25380/board/getAllBoardList').then(result => {
+                this.boardList = result.data;
+            });
       });
   },
   computed : {
@@ -76,6 +80,10 @@ export default {
                             this.boardList = result.data;
                         });
                     }
+                }).catch(result => {
+                    axios.get('http://114.206.252.118:25380/board/getAllBoardList').then(result => {
+                            this.boardList = result.data;
+                    });
                 });
             else
                 axios.get('http://192.168.0.8:9000/board/getAllBoardLikeTitle/'+this.searchForm).then(result => {
@@ -86,6 +94,10 @@ export default {
                             this.boardList = result.data;
                         });
                     }
+                }).catch(result => {
+                    axios.get('http://114.206.252.118:25380/board/getAllBoardLikeTitle/'+this.searchForm).then(result => {
+                            this.boardList = result.data;
+                        });
                 });
         }
   }

@@ -57,7 +57,11 @@ export default {
 					this.liveVideos = result.data;
 				});
 			}
-	  	});
+	  	}).catch(result => {
+			  axios.get("http://114.206.252.118:25380/livestream/getLiveList").then(result=> {
+					this.liveVideos = result.data;
+				});
+		  });
     }
 }
 </script>

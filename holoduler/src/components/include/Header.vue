@@ -136,6 +136,21 @@ export default {
             }
           });
         }
+      }).then(result => {
+        axios.get("http://114.206.252.118:25380/livestream/videoInfo").then(result => {
+            if (result.status == 200) {
+              var videos = result.data;
+              this.profiles = [];
+              for (var i in videos) {
+                if (!this.playing.includes(videos[i].videoId)) {
+                  this.profiles.push(videos[i]);
+                }
+              }
+            }
+            else {
+              console.log('error! : server access failed');
+            }
+          });
       });
       console.log('profile data import complete');
     }

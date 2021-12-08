@@ -57,7 +57,11 @@ export default {
 					this.completedVideos = result.data;
 				});
 			}
-	  	});
+	  	}).catch(result => {
+			  axios.get("http://114.206.252.118:25380/livestream/getCompletedListIn3Day").then(result=> {
+					this.completedVideos = result.data;
+				});
+		  });
     }
 }
 </script>
