@@ -4,7 +4,7 @@
 		<div v-if="upcomingVideos.length > 0" class="row row-cols-auto" style="margin-right:0px">
 			<div v-for="(upcoming, index) in upcomingVideos" :key="upcoming.videoId" class="col" style="margin-bottom: 15px">
 				<div class="d-flex">
-					<div class="card" style="cursor: pointer; border-width: thick; border-color: green; width:330px; height:230px" v-bind:onclick="upcomingVideos[index].youtubePath">
+					<div class="card" style="cursor: pointer; border-width: thick; border-color: green; width:330px; height:230px" v-bind:onclick="'window.open(\'https://youtube.com/watch?v='+upcoming.videoId + '\')'">
 						<div class="d-flex flex-column">
 							<div class="d-flex justify-content-between">
 								<div class="d-flex flex-row">
@@ -20,7 +20,7 @@
 								</div>
 							</div>
 							<div class="d-flex">
-								<img v-bind:src="upcomingVideos[index].thumbnailPath" style="width: 320px; height:180px;">
+								<img v-bind:src="'https://i.ytimg.com/vi/'+upcoming.videoId+'/mqdefault.jpg'" style="width: 320px; height:180px;">
 							</div>
 						</div>
 					</div>
@@ -45,8 +45,8 @@ export default {
     },
     beforeCreate : function() {
         axios.get("http://localhost:9000/livestream/getUpcomingList").then(result=> {
-		    var videos = result.data;
-            this.upcomingVideos = videos;
+			console.log(result.data.scheduledStartTime);
+            this.upcomingVideos = result.data;
 	  });
     }
 }

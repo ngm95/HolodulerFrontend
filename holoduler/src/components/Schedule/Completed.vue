@@ -4,7 +4,7 @@
 		<div v-if="completedVideos.length > 0" class="row row-cols-auto" style="margin-right:0px">
 			<div v-for="(completed, index) in completedVideos" :key="completed.videoId" class="col" style="margin-bottom: 15px;">
 				<div class="d-flex">
-					<div class="card" style="cursor: pointer; border-width: thick; border-color: red; width:330px; height:230px" v-bind:onclick="completedVideos[index].youtubePath">
+					<div class="card" style="cursor: pointer; border-width: thick; border-color: red; width:330px; height:230px" v-bind:onclick="'window.open(\'https://youtube.com/watch?v='+completed.videoId + '\')'">
 						<div class="d-flex flex-column">
 							<div class="d-flex justify-content-between">
 								<div class="d-flex flex-row">
@@ -20,7 +20,7 @@
 								</div>
 							</div>
 							<div class="d-flex">
-								<img v-bind:src="completedVideos[index].thumbnailPath" style="width: 320px; height:180px;">
+								<img v-bind:src="'https://i.ytimg.com/vi/'+completed.videoId+'/mqdefault.jpg'" style="width: 320px; height:180px;">
 							</div>
 						</div>
 					</div>

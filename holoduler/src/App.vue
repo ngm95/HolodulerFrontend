@@ -1,16 +1,16 @@
 <template>
   <div id="app">
     <div id="header">
-      <main-header v-on:selected="drawIframe" />
+      <main-header ref="header" v-on:selected="drawIframe" />
     </div>
-    <router-view ref="multiview"/> 
+    <router-view ref="multiview" v-on:deleted="refreshProfile" /> 
   </div>
   
 </template>
 
 
 <script>
-import MainHeader from './components/Header.vue'
+import MainHeader from './components/include/Header'
 export default {
   name: 'Main',
   data () {
@@ -24,6 +24,9 @@ export default {
   methods : {
     drawIframe(clicked, idx) {
       this.$refs.multiview.addIframe(clicked);
+    },
+    refreshProfile(videoId) {
+      this.$refs.header.deletePlaying(videoId);
     }
   }
 }

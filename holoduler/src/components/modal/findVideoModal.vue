@@ -4,7 +4,7 @@
         <b-tabs content-class="mt-3">
             <b-tab title="라이브 중인 방송" active>
                 <div id="videoDiv" class="row row-cols-auto" style="margin-left:10px">
-                    <div v-for="(live, index) in liveVideos" :key="live.videoId" @click="selectedLive" v-bind:id="index" name="select" class="col" style="margin-bottom: 15px; padding-left: 8px; pdding-right: 8px">
+                    <div v-for="(live, index) in liveVideos" :key="live.videoId" @click="selectedLive($event, live.videoId)" v-bind:id="index" name="select" class="col" style="margin-bottom: 15px; padding-left: 8px; pdding-right: 8px">
                         <div class="d-flex">
                             <div class="card" style="border-width: thick; border-color: red; width: 130px; height: 140.5px">
                                 <div class="d-flex flex-column">
@@ -19,12 +19,12 @@
                                                 <b>{{live.actualStartTime.substr(0, 8)}}</b>
                                             </div>
                                             <div class="d-flex" style="margin-top: 8px">
-                                                <b>{{live.actualStartTime.substr(9, 5)}}</b>
+                                                <b>{{live.actualStartTime.substr(9, 8)}}</b>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="d-flex">
-                                        <img v-bind:src="live.thumbnailPath" style="width: 120px; height: 67.5px;">
+                                        <img v-bind:src="'https://i.ytimg.com/vi/'+live.videoId+'/mqdefault.jpg'" style="width: 120px; height: 67.5px;">
                                     </div>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@
             </b-tab>
             <b-tab title="예약된 방송">
                 <div id="videoDiv" class="row row-cols-auto" style="margin-left:10px">
-                    <div v-for="(upcoming, index) in upcomingVideos" :key="upcoming.videoId" @click="selectedUpcoming" v-bind:id="index" name="select" class="col" style="margin-bottom: 15px; padding-left: 8px; pdding-right: 8px">
+                    <div v-for="(upcoming, index) in upcomingVideos" :key="upcoming.videoId" @click="selectedUpcoming($event, upcoming.videoId)" v-bind:id="index" name="select" class="col" style="margin-bottom: 15px; padding-left: 8px; pdding-right: 8px">
                         <div class="d-flex">
                             <div class="card" style="border-width: thick; border-color: green; width: 130px; height: 140.5px">
                                 <div class="d-flex flex-column">
@@ -49,12 +49,12 @@
                                                 <b>{{upcoming.scheduledStartTime.substr(0, 8)}}</b>
                                             </div>
                                             <div class="d-flex" style="margin-top: 8px">
-                                                <b>{{upcoming.scheduledStartTime.substr(9, 5)}}</b>
+                                                <b>{{upcoming.scheduledStartTime.substr(9, 8)}}</b>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="d-flex">
-                                        <img v-bind:src="upcoming.thumbnailPath" style="width: 120px; height: 67.5px;">
+                                        <img v-bind:src="'https://i.ytimg.com/vi/'+upcoming.videoId+'/mqdefault.jpg'" style="width: 120px; height: 67.5px;">
                                     </div>
                                 </div>
                             </div>
@@ -75,7 +75,7 @@
                     <hr/>
                     <div class="d-flex flex-column">
                         <div id="videoDiv" class="row row-cols-auto">
-                            <div v-for="(completed, index) in completedVideos" :key="completed.videoId" @click="selectedCompleted" v-bind:id="index" name="select" class="col" style="margin-bottom: 15px; padding-left: 8px; pdding-right: 8px">
+                            <div v-for="(completed, index) in completedVideos" :key="completed.videoId" @click="selectedCompleted($event, completed.videoId)" v-bind:id="index" name="select" class="col" style="margin-bottom: 15px; padding-left: 8px; pdding-right: 8px">
                                 <div class="d-flex">
                                     <div class="card" style="border-width: thick; border-color: gray; width: 130px; height: 140.5px">
                                         <div class="d-flex flex-column">
@@ -90,12 +90,12 @@
                                                         <b>{{completed.actualStartTime.substr(0, 8)}}</b>
                                                     </div>
                                                     <div class="d-flex" style="margin-top: 8px">
-                                                        <b>{{completed.actualStartTime.substr(9, 5)}}</b>
+                                                        <b>{{completed.actualStartTime.substr(9, 8)}}</b>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="d-flex">
-                                                <img v-bind:src="completed.thumbnailPath" style="width: 120px; height: 67.5px;">
+                                                <img v-bind:src="'https://i.ytimg.com/vi/'+completed.videoId+'/mqdefault.jpg'" style="width: 120px; height: 67.5px;">
                                             </div>
                                         </div>
                                     </div>
@@ -135,17 +135,17 @@ import axios from 'axios'
                     
                 });
             },
-            selectedLive : function(event) {
+            selectedLive : function(event, videoId) {
                 var targetId = event.currentTarget.id;
-                this.$emit('selected', this.liveVideos[targetId]);
+                this.$emit('selected', this.liveVideos[targetId], videoId);
             },
-            selectedUpcoming : function(event) {
+            selectedUpcoming : function(event, videoId) {
                 var targetId = event.currentTarget.id;
-                this.$emit('selected', this.upcomingVideos[targetId]);
+                this.$emit('selected', this.upcomingVideos[targetId], videoId);
             },
-            selectedCompleted : function(event) {
+            selectedCompleted : function(event, videoId) {
                 var targetId = event.currentTarget.id;
-                this.$emit('selected', this.completedVideos[targetId]);
+                this.$emit('selected', this.completedVideos[targetId], videoId);
             }
         },
         beforeMount : function() {
