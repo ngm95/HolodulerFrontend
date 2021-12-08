@@ -4,9 +4,9 @@
 		<div v-if="completedVideos.length > 0" class="row row-cols-auto" style="margin-right:0px">
 			<div v-for="(completed, index) in completedVideos" :key="completed.videoId" class="col" style="margin-bottom: 15px;">
 				<div class="d-flex">
-					<div class="card" style="cursor: pointer; border-width: thick; border-color: red; width:330px; height:230px" v-bind:onclick="'window.open(\'https://youtube.com/watch?v='+completed.videoId + '\')'">
+					<div class="card" style="cursor: pointer; border-width: thick; border-color: red; width:330px; height:240px" v-bind:onclick="'window.open(\'https://youtube.com/watch?v='+completed.videoId + '\')'">
 						<div class="d-flex flex-column">
-							<div class="d-flex justify-content-between">
+							<div class="d-flex justify-content-between align-items-center">
 								<div class="d-flex flex-row">
 									<div class="d-flex">
 										<img v-bind:src="completedVideos[index].profilePath" style="border-radius: 50%; width: 40px; border: 2px white solid;">
@@ -15,8 +15,13 @@
 									{{completed.memberName}}
 								</div>
 								</div>
-								<div class="d-flex" style="margin-top: 8px">
-									<b>{{completed.actualStartTime}}</b>
+								<div id="infoDiv" class="d-flex-column">
+									<div class="d-flex">
+										<b>{{completed.actualStartTime.substring(0, 8)}}</b>
+									</div>
+									<div class="d-flex">
+										<b>{{completed.actualStartTime.substring(9, 8)}}</b>
+									</div>
 								</div>
 							</div>
 							<div class="d-flex">
@@ -55,5 +60,9 @@ export default {
 <style scoped>
 .col {
 	margin-left:20px;
+}
+#infoDiv{
+	margin-top: 4px; 
+	margin-right:15px;
 }
 </style>

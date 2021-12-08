@@ -16,7 +16,7 @@
 
             <b-table id="boardTable" responsive="sm" striped :items="boardList" :per-page="perPage" :current-page="currentPage" :fields="fields">
                 <template #cell(title)="data">
-                    <a v-bind:href="'/board/boardList/'+data.item.boardId">{{data.item.title}}</a>
+                    <router-link v-bind:to="'/board/boardList/'+data.item.boardId">{{data.item.title}}</router-link>
                 </template>
             </b-table>
             <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="boardTable" align="fill"></b-pagination>

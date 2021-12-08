@@ -6,7 +6,7 @@
                 <div id="videoDiv" class="row row-cols-auto" style="margin-left:10px">
                     <div v-for="(live, index) in liveVideos" :key="live.videoId" @click="selectedLive($event, live.videoId)" v-bind:id="index" name="select" class="col" style="margin-bottom: 15px; padding-left: 8px; pdding-right: 8px">
                         <div class="d-flex">
-                            <div class="card" style="border-width: thick; border-color: red; width: 130px; height: 140.5px">
+                            <div class="card" style="border-width: thick; border-color: red; width: 135px; height: 140.5px">
                                 <div class="d-flex flex-column">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex flex-row">
@@ -14,17 +14,17 @@
                                                 <img v-bind:src="live.profilePath" style="border-radius: 50%; width: 50px; height:50px; border: 1px white solid">
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column">
-                                            <div class="d-flex" style="margin-top: 8px">
+                                        <div id="datetime" class="d-flex flex-column">
+                                            <div class="d-flex">
                                                 <b>{{live.actualStartTime.substr(0, 8)}}</b>
                                             </div>
-                                            <div class="d-flex" style="margin-top: 8px">
+                                            <div class="d-flex">
                                                 <b>{{live.actualStartTime.substr(9, 8)}}</b>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex">
-                                        <img v-bind:src="'https://i.ytimg.com/vi/'+live.videoId+'/mqdefault.jpg'" style="width: 120px; height: 67.5px;">
+                                    <div id="thumbnail" class="d-flex">
+                                        <img v-bind:src="'https://i.ytimg.com/vi/'+live.videoId+'/mqdefault.jpg'" style="width: 125px; height: 75.5px;">
                                     </div>
                                 </div>
                             </div>
@@ -36,7 +36,7 @@
                 <div id="videoDiv" class="row row-cols-auto" style="margin-left:10px">
                     <div v-for="(upcoming, index) in upcomingVideos" :key="upcoming.videoId" @click="selectedUpcoming($event, upcoming.videoId)" v-bind:id="index" name="select" class="col" style="margin-bottom: 15px; padding-left: 8px; pdding-right: 8px">
                         <div class="d-flex">
-                            <div class="card" style="border-width: thick; border-color: green; width: 130px; height: 140.5px">
+                            <div class="card" style="border-width: thick; border-color: green; width: 135px; height: 140.5px">
                                 <div class="d-flex flex-column">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="d-flex flex-row">
@@ -44,17 +44,17 @@
                                                 <img v-bind:src="upcoming.profilePath" style="border-radius: 50%; width: 50px; height:50px; border: 1px white solid">
                                             </div>
                                         </div>
-                                        <div class="d-flex flex-column">
-                                            <div class="d-flex" style="margin-top: 8px">
+                                        <div id="datetime" class="d-flex flex-column">
+                                            <div class="d-flex">
                                                 <b>{{upcoming.scheduledStartTime.substr(0, 8)}}</b>
                                             </div>
-                                            <div class="d-flex" style="margin-top: 8px">
+                                            <div class="d-flex">
                                                 <b>{{upcoming.scheduledStartTime.substr(9, 8)}}</b>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="d-flex">
-                                        <img v-bind:src="'https://i.ytimg.com/vi/'+upcoming.videoId+'/mqdefault.jpg'" style="width: 120px; height: 67.5px;">
+                                    <div id="thumbnail" class="d-flex">
+                                        <img v-bind:src="'https://i.ytimg.com/vi/'+upcoming.videoId+'/mqdefault.jpg'" style="width: 125px; height: 75.5px;">
                                     </div>
                                 </div>
                             </div>
@@ -77,7 +77,7 @@
                         <div id="videoDiv" class="row row-cols-auto">
                             <div v-for="(completed, index) in completedVideos" :key="completed.videoId" @click="selectedCompleted($event, completed.videoId)" v-bind:id="index" name="select" class="col" style="margin-bottom: 15px; padding-left: 8px; pdding-right: 8px">
                                 <div class="d-flex">
-                                    <div class="card" style="border-width: thick; border-color: gray; width: 130px; height: 140.5px">
+                                    <div class="card" style="border-width: thick; border-color: gray; width: 135px; height: 140.5px">
                                         <div class="d-flex flex-column">
                                             <div class="d-flex justify-content-between align-items-center">
                                                 <div class="d-flex flex-row">
@@ -85,17 +85,17 @@
                                                         <img v-bind:src="completed.profilePath" style="border-radius: 50%; width: 50px; height:50px; border: 1px white solid">
                                                     </div>
                                                 </div>
-                                                <div class="d-flex flex-column">
-                                                    <div class="d-flex" style="margin-top: 8px">
+                                                <div id="datetime" class="d-flex flex-column">
+                                                    <div class="d-flex">
                                                         <b>{{completed.actualStartTime.substr(0, 8)}}</b>
                                                     </div>
-                                                    <div class="d-flex" style="margin-top: 8px">
+                                                    <div class="d-flex">
                                                         <b>{{completed.actualStartTime.substr(9, 8)}}</b>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="d-flex">
-                                                <img v-bind:src="'https://i.ytimg.com/vi/'+completed.videoId+'/mqdefault.jpg'" style="width: 120px; height: 67.5px;">
+                                            <div id="thumbnail" class="d-flex">
+                                                <img v-bind:src="'https://i.ytimg.com/vi/'+completed.videoId+'/mqdefault.jpg'" style="width: 125px; height: 75.5px;">
                                             </div>
                                         </div>
                                     </div>
@@ -183,5 +183,10 @@ import axios from 'axios'
     margin-left:10px;
     min-height: 400px;
 }
-
+#datetime {
+    margin-top : 3px;
+}
+#thumbnail {
+    margin-top : 5px;
+}
 </style>

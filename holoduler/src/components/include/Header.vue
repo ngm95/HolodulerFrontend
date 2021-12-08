@@ -18,30 +18,30 @@
             </div>
           </b-sidebar>
 
-          <div class="d-flex" style="margin-left : 20px">
-            <b-button variant="warning" id="refresh" style="margin-right:5px; height:50px" @click="getProfile">
+          <div class="d-flex">
+            <b-button id="refreshBtn" variant="warning" @click="getProfile">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-clockwise" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z" />
                 <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z" />
               </svg>
             </b-button>
           </div>
-          <div id="findVideo" class="d-flex">
+          <div class="d-flex">
             <findVideoModal v-on:selected="selectedModal"/>
-            <b-button v-b-modal.modal-scrollable  variant="secondary" style="margin-right:10px; height:50px">
+            <b-button id="findVideoBtn" v-b-modal.modal-scrollable variant="secondary">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
               </svg>
             </b-button>
           </div>
           <div id="profileList" class="d-flex">
-            <div v-for="(profile, index) in profiles" :key="profile.videoId"  v-bind:id="index" @click="selected($event, index, profile.videoId)">
+            <div class="d-flex align-items-center" v-for="(profile, index) in profiles" :key="profile.videoId"  v-bind:id="index" @click="selected($event, index, profile.videoId)">
               <div v-if="typeof(profile.actualStartTime) !== 'undefined'"  v-b-tooltip.hover.bottom v-b-tooltip.html="true" 
-               v-bind:title="'<div class=\'d-flex flex-column\'><div class=\'d-flex flex-row\'><img src=\'' + 'https://i.ytimg.com/vi/'+profile.videoId+'/mqdefault.jpg' + '\' width=\'100%\' height=\'100%\'></div><div class=\'d-flex flex-row\'>시작 시각 : ' + profile.actualStartTime + '</div></div>'">
+               v-bind:title="'<div class=\'d-flex flex-column\'><div class=\'d-flex flex-row\'><img src=\'' + 'https://i.ytimg.com/vi/'+profile.videoId+'/mqdefault.jpg' + '\' width=\'100%\' height=\'100%\'></div><div class=\'d-flex flex-row justify-content-center\'>시작 시각 : ' + profile.actualStartTime.substring(9) + '</div></div>'">
                 <b-avatar v-bind:src="profile.profilePath" style="border:2px red solid"></b-avatar>
               </div>
               <div v-else v-b-tooltip.hover.bottom v-b-tooltip.html="true" 
-               v-bind:title="'<div class=\'d-flex flex-column\'><div class=\'d-flex flex-row\'><img src=\'' + 'https://i.ytimg.com/vi/'+profile.videoId+'/mqdefault.jpg' + '\' width=\'100%\' height=\'100%\'></div><div class=\'d-flex flex-row\'>예정 시각 : ' + profile.scheduledStartTime + '</div></div>'">
+               v-bind:title="'<div class=\'d-flex flex-column\'><div class=\'d-flex flex-row\'><img src=\'' + 'https://i.ytimg.com/vi/'+profile.videoId+'/mqdefault.jpg' + '\' width=\'100%\' height=\'100%\'></div><div class=\'d-flex flex-row justify-content-center\'>예정 시각 : ' + profile.scheduledStartTime.substring(9) + '</div></div>'">
                 <b-avatar v-bind:src="profile.profilePath" style="border:2px green solid"></b-avatar>
               </div>
             </div>
@@ -135,5 +135,21 @@ export default {
 #profileImg {
   border-radius:50%; 
   width:55px;
+}
+.align-items-center {
+  margin-left : 1px;
+  margin-right : 1px;
+}
+#findVideoBtn {
+  margin-left : 5px;
+  margin-right : 6px;
+  height : 50px;
+}
+#refreshBtn {
+  margin-left : 10px;
+  height : 50px;
+}
+.nav-item {
+  margin-bottom : 15px;
 }
 </style>
