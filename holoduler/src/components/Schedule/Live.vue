@@ -63,10 +63,7 @@ export default {
 
 <style scoped>
 .row {
-	margin-left : 10px;
-}
-.col {
-	margin-left:10px;
+	margin-left:0px;
 }
 #infoDiv{
 	margin-top: 4px; 

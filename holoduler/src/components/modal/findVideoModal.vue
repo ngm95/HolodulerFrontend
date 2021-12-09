@@ -223,12 +223,8 @@ import axios from 'axios'
 
 <style>
 
-
-.row, .col {
-    padding : 0px 0px 0px 0px;
-}
 #videoDiv {
-    margin-left:10px;
+    margin-left:5px;
     min-height: 400px;
 }
 #datetime {
