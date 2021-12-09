@@ -78,10 +78,12 @@ export default {
   methods : {
     // 프로필을 선택했을 때 App.vue의 메소드 호출 후 해당 프로필 제거
     selected : function(event, idx, videoId) {
-      this.$emit('selected', this.profiles[idx], idx);
+      if (this.$router.history.current.fullPath == '/multiview') {
+        this.$emit('selected', this.profiles[idx], idx);
 
-      this.deleteProfile(idx);
-      this.addPlaying(videoId);
+        this.deleteProfile(idx);
+        this.addPlaying(videoId);
+      }
     },
     // 모달에서 영상을 선택했을 때 App.vue의 메소드 호출
     selectedModal : function(video, videoId) {   

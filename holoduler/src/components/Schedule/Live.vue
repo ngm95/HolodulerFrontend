@@ -62,8 +62,11 @@ export default {
 </script>
 
 <style scoped>
+.row {
+	margin-left : 10px;
+}
 .col {
-	margin-left:20px;
+	margin-left:10px;
 }
 #infoDiv{
 	margin-top: 4px; 
