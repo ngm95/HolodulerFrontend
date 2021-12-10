@@ -70,7 +70,6 @@ export default {
   },
   mounted : function() {
     this.getProfile();
-    console.log('interval function start');
     this.interval = setInterval(this.getProfile, 1000*60*2);
   },
   methods : {
@@ -135,7 +134,6 @@ export default {
       });
       this.$refs.findVideoModal.readUpcoming();
       this.$refs.findVideoModal.readLive();
-      this.$refs.findVideoModal.readCompletedBetween();
       console.log('profile data import complete');
     }
   }
