@@ -66,10 +66,10 @@
                 <div class="d-flex flex-column">
                     <div class="d-flex flex-row justify-content-end" style="margin-left:10px">
                         <div class="d-flex">
-                            <b-form-datepicker name="startDate" :hide-header='true' :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit' }" @input="readCompletedBetween" v-model="startDate"></b-form-datepicker>
+                            <b-form-datepicker name="startDate" :hide-header='true' :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit' }" @input="[readCompletedBetweenToInternet(), readCompletedBetweenToLan()]" v-model="startDate"></b-form-datepicker>
                         </div>
                         <div class="d-flex">
-                            <b-form-datepicker name="endDate" :hide-header=true :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit' }" @input="readCompletedBetween" v-model="endDate"></b-form-datepicker>
+                            <b-form-datepicker name="endDate" :hide-header=true :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit' }" @input="[readCompletedBetweenToInternet(), readCompletedBetweenToLan()]" v-model="endDate"></b-form-datepicker>
                         </div>
                     </div>
                     <hr/>
@@ -125,12 +125,17 @@ import axios from 'axios'
                 endDate : setInitialDate(now),
                 liveVideos : [],
                 upcomingVideos : [],
-                completedVideos : []
+                completedVideos : [],
+                stopFlagInternet : false,
+                stopFlagLan : false
             }
+        },
+        mounted : function () {
+            this.readCompletedBetweenToInternet();
+            this.readCompletedBetweenToLan();
         },
         methods : {
             readUpcoming() {
-                console.log("readUpcoming");
                 axios.get('http://192.168.0.8:9000/livestream/getUpcomingList').then(result => {
                     if (result.status == 200)
                         this.upcomingVideos = result.data;
@@ -148,7 +153,6 @@ import axios from 'axios'
                 });
             },
             readLive() {
-                console.log("readLive");
                 axios.get('http://192.168.0.8:9000/livestream/getLiveList').then(result => {
                     if (result.status == 200)
                         this.liveVideos = result.data;
@@ -166,7 +170,6 @@ import axios from 'axios'
                 }); 
             },
             readCompleted() {
-                console.log("readCompleted");
                 axios.get('http://192.168.0.8:9000/livestream/getCompletedListIn3Day').then(result => {
                     if (result.status == 200)    
                         this.completedVideos = result.data;
@@ -183,34 +186,51 @@ import axios from 'axios'
                         })
                 });
             },
-            readCompletedBetween() {
-                console.log("readCompletedBetween");
+            async readCompletedBetweenToInternet() {
+                console.log("readCompletedBetweenToInternet");
+                if (this.stopFlagInternet == true)
+                    return;
 
-                axios.get('http://192.168.0.8:9000/livestream/getCompletedListSize/'+this.startDate+"/"+this.endDate).then(result => {
+                this.stopFlagInternet = true;
+
+                console.log('access to internet');
+                const internet = await axios.get('http://114.206.252.118:25380/livestream/getCompletedListSize/'+this.startDate+"/"+this.endDate)
+                if (internet != null && internet.status == 200) {
                     this.completedVideos = [];
-                    var length = result.data;
-                    for (var offset = 0; offset <= length; offset+=50) {
-                         axios.get('http://192.168.0.8:9000/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate+"/"+offset).then(result => {
+                    var length = internet.data;
+                    for (var offset = 0; offset <= length; offset += 100) {
+                        await axios.get('http://114.206.252.118:25380/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate+"/"+offset).then(result => {
                             var videos = result.data;
-                            for (var i in videos) {
+                            for (var i in videos)
                                 this.completedVideos.push(videos[i]);
-                            }
-                         });
+                        });
                     }
-                }).catch(error => {
-                    axios.get('http://114.206.252.118:25380/livestream/getCompletedListSize/'+this.startDate+"/"+this.endDate).then(result => {
-                        this.completedVideos = [];
-                        var length = result.data;
-                        for (var offset = 0; offset <= length; offset+=50) {
-                            axios.get('http://114.206.252.118:25380/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate+"/"+offset).then(result => {
-                                var videos = result.data;
-                                for (var i in videos) {
-                                    this.completedVideos.push(videos[i]);
-                                }
-                            });
-                        }
-                    });
-                });
+                }
+
+                this.stopFlagInternet = false;
+            },
+            async readCompletedBetweenToLan() {
+                console.log("readCompletedBetweenToLan");
+                if (this.stopFlagLan == true)
+                    return;
+
+                this.stopFlagLan = true;
+
+                console.log('access to lan');
+                const lan = await axios.get('http://192.168.0.8:9000/livestream/getCompletedListSize/'+this.startDate+"/"+this.endDate)
+                if (lan.status == 200) {
+                    this.completedVideos = [];
+                    var length = lan.data;
+                    for (var offset = 0; offset <= length; offset += 100) {
+                        await axios.get('http://192.168.0.8:9000/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate+"/"+offset).then(result => {
+                            var videos = result.data;
+                            for (var i in videos)
+                                this.completedVideos.push(videos[i]);
+                        });
+                    }
+                }
+
+                this.stopFlagLan = false;
             },
             selectedLive : function(event, videoId) {
                 var targetId = event.currentTarget.id;
