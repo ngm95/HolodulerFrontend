@@ -1,5 +1,5 @@
 <template>
-	<div id="schedule" style="background-color:#f1f1f1">
+	<div id="schedule" style="background-color:#f1f1f1; padding-top:10px">
 		<liveSchedule/>
 		<upcomingSchedule/>
 		<completedSchedule/>

@@ -66,10 +66,10 @@
                 <div class="d-flex flex-column">
                     <div class="d-flex flex-row justify-content-end" style="margin-left:10px">
                         <div class="d-flex">
-                            <b-form-datepicker name="startDate" :hide-header='true' :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit' }" @input="readCompleted" v-model="startDate"></b-form-datepicker>
+                            <b-form-datepicker name="startDate" :hide-header='true' :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit' }" @input="readCompletedBetween" v-model="startDate"></b-form-datepicker>
                         </div>
                         <div class="d-flex">
-                            <b-form-datepicker name="endDate" :hide-header=true :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit' }" @input="readCompleted" v-model="endDate"></b-form-datepicker>
+                            <b-form-datepicker name="endDate" :hide-header=true :date-format-options="{ year: '2-digit', month: '2-digit', day: '2-digit' }" @input="readCompletedBetween" v-model="endDate"></b-form-datepicker>
                         </div>
                     </div>
                     <hr/>
@@ -121,7 +121,7 @@ import axios from 'axios'
             const threeDaysAgo = new Date(now.getFullYear(), now.getMonth(), now.getDate()-3)
             
             return {
-                startDate : setInitialDate(threeDaysAgo),
+                startDate : setInitialDate(now),
                 endDate : setInitialDate(now),
                 liveVideos : [],
                 upcomingVideos : [],
@@ -129,21 +129,88 @@ import axios from 'axios'
             }
         },
         methods : {
-            readCompleted() {
-                axios.get('http://192.168.0.8:9000/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate).then(result => {
+            readUpcoming() {
+                console.log("readUpcoming");
+                axios.get('http://192.168.0.8:9000/livestream/getUpcomingList').then(result => {
                     if (result.status == 200)
+                        this.upcomingVideos = result.data;
+                    else {
+                        axios.get('http://114.206.252.118:25380/livestream/getUpcomingList').then(result => {
+                            if (result.status == 200)
+                                this.upcomingVideos = result.data;
+                        })
+                    }    
+                }).catch(error => {
+                    axios.get('http://114.206.252.118:25380/livestream/getUpcomingList').then(result => {
+                            if (result.status == 200)
+                                this.upcomingVideos = result.data;
+                        })
+                });
+            },
+            readLive() {
+                console.log("readLive");
+                axios.get('http://192.168.0.8:9000/livestream/getLiveList').then(result => {
+                    if (result.status == 200)
+                        this.liveVideos = result.data;
+                    else {
+                        axios.get('http://114.206.252.118:25380/livestream/getLiveList').then(result => {
+                            if (result.status == 200)
+                                this.liveVideos = result.data;
+                        })
+                    }
+                }).catch(error => {
+                    axios.get('http://114.206.252.118:25380/livestream/getLiveList').then(result => {
+                            if (result.status == 200)
+                                this.liveVideos = result.data;
+                        })
+                }); 
+            },
+            readCompleted() {
+                console.log("readCompleted");
+                axios.get('http://192.168.0.8:9000/livestream/getCompletedListIn3Day').then(result => {
+                    if (result.status == 200)    
                         this.completedVideos = result.data;
                     else {
-                        axios.get('http://114.206.252.118:25380/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate).then(result => {
-                            this.completedVideos = result.data;
-                        });
+                        axios.get('http://114.206.252.118:25380/livestream/getCompletedListIn3Day').then(result => {
+                            if (result.status == 200)
+                                this.completedVideos = result.data;
+                        })
                     }
-                }).catch(result => {
-                    axios.get('http://114.206.252.118:25380/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate).then(result => {
-                            this.completedVideos = result.data;
-                        });
+                }).catch(error => {
+                    axios.get('http://114.206.252.118:25380/livestream/getCompletedListIn3Day').then(result => {
+                            if (result.status == 200)
+                                this.completedVideos = result.data;
+                        })
                 });
-                
+            },
+            readCompletedBetween() {
+                console.log("readCompletedBetween");
+
+                axios.get('http://192.168.0.8:9000/livestream/getCompletedListSize/'+this.startDate+"/"+this.endDate).then(result => {
+                    this.completedVideos = [];
+                    var length = result.data;
+                    for (var offset = 0; offset <= length; offset+=50) {
+                         axios.get('http://192.168.0.8:9000/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate+"/"+offset).then(result => {
+                            var videos = result.data;
+                            for (var i in videos) {
+                                this.completedVideos.push(videos[i]);
+                            }
+                         });
+                    }
+                }).catch(error => {
+                    axios.get('http://114.206.252.118:25380/livestream/getCompletedListSize/'+this.startDate+"/"+this.endDate).then(result => {
+                        this.completedVideos = [];
+                        var length = result.data;
+                        for (var offset = 0; offset <= length; offset+=50) {
+                            axios.get('http://114.206.252.118:25380/livestream/getCompletedListBetweenSomeday/'+this.startDate+"/"+this.endDate+"/"+offset).then(result => {
+                                var videos = result.data;
+                                for (var i in videos) {
+                                    this.completedVideos.push(videos[i]);
+                                }
+                            });
+                        }
+                    });
+                });
             },
             selectedLive : function(event, videoId) {
                 var targetId = event.currentTarget.id;
@@ -157,55 +224,6 @@ import axios from 'axios'
                 var targetId = event.currentTarget.id;
                 this.$emit('selected', this.completedVideos[targetId], videoId);
             }
-        },
-        beforeMount : function() {
-            axios.get('http://192.168.0.8:9000/livestream/getLiveList').then(result => {
-                if (result.status == 200)
-                    this.liveVideos = result.data;
-                else {
-                    axios.get('http://114.206.252.118:25380/livestream/getLiveList').then(result => {
-                        if (result.status == 200)
-                            this.liveVideos = result.data;
-                    })
-                }
-            }).catch(result => {
-                axios.get('http://114.206.252.118:25380/livestream/getLiveList').then(result => {
-                        if (result.status == 200)
-                            this.liveVideos = result.data;
-                    })
-            });
-            
-            axios.get('http://192.168.0.8:9000/livestream/getUpcomingList').then(result => {
-                if (result.status == 200)
-                    this.upcomingVideos = result.data;
-                else {
-                    axios.get('http://114.206.252.118:25380/livestream/getUpcomingList').then(result => {
-                        if (result.status == 200)
-                            this.upcomingVideos = result.data;
-                    })
-                }    
-            }).catch(result => {
-                axios.get('http://114.206.252.118:25380/livestream/getUpcomingList').then(result => {
-                        if (result.status == 200)
-                            this.upcomingVideos = result.data;
-                    })
-            });
-
-            axios.get('http://192.168.0.8:9000/livestream/getCompletedListIn3Day').then(result => {
-                if (result.status == 200)    
-                    this.completedVideos = result.data;
-                else {
-                    axios.get('http://114.206.252.118:25380/livestream/getCompletedListIn3Day').then(result => {
-                        if (result.status == 200)
-                            this.completedVideos = result.data;
-                    })
-                }
-            }).catch(result => {
-                axios.get('http://114.206.252.118:25380/livestream/getCompletedListIn3Day').then(result => {
-                        if (result.status == 200)
-                            this.completedVideos = result.data;
-                    })
-            });
         }
     }
 

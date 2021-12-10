@@ -70,20 +70,21 @@ export default {
                 axios.get('http://192.168.0.8:9000/board/getAllBoardList').then(result => {
                     if (result.status == 200)
                         this.boardList = result.data;
-                }).catch(result => {
+                }).catch(error => {
                     axios.get('http://114.206.252.118:25380/board/getAllBoardList').then(result => {
                             this.boardList = result.data;
                     });
                 });
-            else
+            else {
                 axios.get('http://192.168.0.8:9000/board/getAllBoardLikeTitle/'+this.searchForm).then(result => {
                     if (result.status == 200) 
                         this.boardList = result.data;
-                }).catch(result => {
+                }).catch(error => {
                     axios.get('http://114.206.252.118:25380/board/getAllBoardLikeTitle/'+this.searchForm).then(result => {
                             this.boardList = result.data;
                         });
                 });
+            }
         }
   }
 }

@@ -52,7 +52,7 @@ export default {
         axios.get("http://192.168.0.8:9000/livestream/getUpcomingList").then(result=> {
 			if (result.status == 200)
             	this.upcomingVideos = result.data;
-	  	}).catch(result => {
+	  	}).catch(error => {
 			  axios.get("http://114.206.252.118:25380/livestream/getUpcomingList").then(result=> {
 					this.upcomingVideos = result.data;
 				});

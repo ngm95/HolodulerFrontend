@@ -27,7 +27,7 @@
             </b-button>
           </div>
           <div class="d-flex">
-            <findVideoModal v-on:selected="selectedModal"/>
+            <findVideoModal ref="findVideoModal" v-on:selected="selectedModal"/>
             <b-button id="findVideoBtn" v-b-modal.modal-scrollable variant="secondary">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
                 <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
@@ -68,10 +68,8 @@ export default {
   components : {
     'findVideoModal' : FindVideoModal
   },
-  created : function() {
-    this.getProfile();
-  },
   mounted : function() {
+    this.getProfile();
     console.log('interval function start');
     this.interval = setInterval(this.getProfile, 1000*60*2);
   },
@@ -122,7 +120,7 @@ export default {
             }
           }
         }
-      }).catch(result => {
+      }).catch(error => {
         axios.get("http://114.206.252.118:25380/livestream/videoInfo").then(result => {
             if (result.status == 200) {
               var videos = result.data;
@@ -135,6 +133,9 @@ export default {
             }
           });
       });
+      this.$refs.findVideoModal.readUpcoming();
+      this.$refs.findVideoModal.readLive();
+      this.$refs.findVideoModal.readCompletedBetween();
       console.log('profile data import complete');
     }
   }
