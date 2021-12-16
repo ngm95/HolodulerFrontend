@@ -1,6 +1,6 @@
 <template>
     <div id="board">
-        <div class="jumbotron" style="background-color: #f1f1f1">
+        <div class="jumbotron" v-bind:style="'width:' + width+'px; height:' + (height-60) + 'px; background-color: #f1f1f1'">
             <!-- <newPostModal></newPostModal> -->
 
             <div class="d-flex justify-content-between" id="boardStart">
@@ -20,14 +20,14 @@
                 </template>
             </b-table>
             <b-pagination v-model="currentPage" :total-rows="rows" :per-page="perPage" aria-controls="boardTable" align="fill"></b-pagination>
+
+            <div class="jumbotron" style="margin-top:50px">
+                <b-input-group prepend="제목">
+                    <b-form-input v-model="searchForm" placeholder="검색할 게시물 제목"></b-form-input>
+                    <b-button variant="primary" @click="searchBoard">검색</b-button>
+                </b-input-group>
+            </div>
         </div>
-		
-		<div class="jumbotron">
-            <b-input-group prepend="제목">
-                <b-form-input v-model="searchForm" placeholder="검색할 게시물 제목"></b-form-input>
-                <b-button variant="primary" @click="searchBoard">검색</b-button>
-            </b-input-group>
-		</div>
     </div>
 </template>
 
@@ -42,7 +42,9 @@ export default {
         boardList : [],
         perPage : 10,
         currentPage : 1,
-        searchForm : ''
+        searchForm : '',
+        width : window.innerWidth,
+        height : window.innerHeight
     }
   },
   components : {
@@ -64,28 +66,32 @@ export default {
       }
   },
   methods : {
-        addIframe(video, idx) {},
-        searchBoard() {
-            if (this.searchForm == '')
-                axios.get('http://192.168.0.8:9000/board/getAllBoardList').then(result => {
-                    if (result.status == 200)
+    addIframe(video, idx) {},
+    searchBoard() {
+        if (this.searchForm == '')
+            axios.get('http://192.168.0.8:9000/board/getAllBoardList').then(result => {
+                if (result.status == 200)
+                    this.boardList = result.data;
+            }).catch(error => {
+                axios.get('http://114.206.252.118:25380/board/getAllBoardList').then(result => {
                         this.boardList = result.data;
-                }).catch(error => {
-                    axios.get('http://114.206.252.118:25380/board/getAllBoardList').then(result => {
-                            this.boardList = result.data;
+                });
+            });
+        else {
+            axios.get('http://192.168.0.8:9000/board/getAllBoardLikeTitle/'+this.searchForm).then(result => {
+                if (result.status == 200) 
+                    this.boardList = result.data;
+            }).catch(error => {
+                axios.get('http://114.206.252.118:25380/board/getAllBoardLikeTitle/'+this.searchForm).then(result => {
+                        this.boardList = result.data;
                     });
-                });
-            else {
-                axios.get('http://192.168.0.8:9000/board/getAllBoardLikeTitle/'+this.searchForm).then(result => {
-                    if (result.status == 200) 
-                        this.boardList = result.data;
-                }).catch(error => {
-                    axios.get('http://114.206.252.118:25380/board/getAllBoardLikeTitle/'+this.searchForm).then(result => {
-                            this.boardList = result.data;
-                        });
-                });
-            }
+            });
         }
+    },
+    resizeEvent(width, height) {
+        this.width = width;
+        this.height = height;
+    }
   }
 }
 </script>

@@ -15,8 +15,16 @@ export default {
   name: 'Main',
   data () {
     return {
-      
+      width : window.innerWidth,
+      height : window.innerHeight,
+      divStyle : 'width:' + window.innerWidth + 'px; height:' + (window.innerHeight-60) + 'px',
     }
+  },
+  mounted : function() {
+    window.addEventListener('resize', this.resizeEvent);
+  },
+  beforeDestroy : function() {
+    window.removeEventListener('resize', this.resizeEvent);
   },
   components : {
     'main-header' : MainHeader
@@ -27,6 +35,13 @@ export default {
     },
     refreshProfile(videoId) {
       this.$refs.header.deletePlaying(videoId);
+    },
+    resizeEvent(event) {
+      this.width = window.innerWidth;
+      this.height = window.innerHeight;
+      this.divStyle = 'width:' + this.width + 'px; height:' + (this.height-60) + 'px;';
+      this.$refs.multiview.resizeEvent(this.width, this.height);
+      this.$refs.header.resizeEvent(this.width);
     }
   }
 }

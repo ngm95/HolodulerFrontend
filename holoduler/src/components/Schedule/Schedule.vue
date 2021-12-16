@@ -1,5 +1,5 @@
 <template>
-	<div id="schedule" style="background-color:#f1f1f1; padding-top:10px">
+	<div id="schedule" v-bind:style="'width:' + width + 'px; background-color:#f1f1f1; padding-top:10px'">
 		<liveSchedule/>
 		<upcomingSchedule/>
 		<completedSchedule/>
@@ -21,7 +21,9 @@ export default {
   },
   data() {
 	  return {
-		msg: 'Schedule Page'
+		msg: 'Schedule Page',
+		width : window.innerWidth,
+		height : window.innerHeight
 	  }
       
   },
@@ -30,7 +32,11 @@ export default {
   methods : {
 	  addIframe(video, idx) {
 
-	  }
+	  },
+	  resizeEvent(width, height) {
+      	this.width = width,
+      	this.height = height;
+    }
   }
 }
 </script>

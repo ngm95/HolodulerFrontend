@@ -72,16 +72,10 @@ export default {
                   [[0, 0], [8, 0], [16, 0], [0, 8], [8, 8], [16, 8], [0, 16], [8, 16], [16, 16]]],
     }
   },
-  mounted : function() {
-    window.addEventListener('resize', this.resizeEvent);
-  },
-  beforeDestroy : function() {
-    window.removeEventListener('resize', this.resizeEvent);
-  },
   methods : {
-    resizeEvent(event) {
-      this.width = window.innerWidth;
-      this.height = window.innerHeight;
+    resizeEvent(width, height) {
+      this.width = width;
+      this.height = height;
       
       this.changeSize();
     },
